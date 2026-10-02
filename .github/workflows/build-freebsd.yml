@@ -23,12 +23,14 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: FreeBSD ${{ matrix.release }} static
+    name: FreeBSD ${{ matrix.release }} ${{ matrix.arch }} static
 
     strategy:
       fail-fast: false
       matrix:
         release: ['14.4', '15.0']
+        # arm64 runs in an emulated VM, so it is built for releases only
+        arch: ${{ fromJSON(github.ref_type == 'tag' && '["amd64", "arm64"]' || '["amd64"]') }}
 
     steps:
     - name: Checkout
@@ -38,6 +40,7 @@ jobs:
       uses: vmactions/freebsd-vm@v1
       with:
         release: ${{ matrix.release }}
+        arch: ${{ matrix.arch }}
         usesh: true
         mem: 4096
         sync: rsync
@@ -63,5 +66,5 @@ jobs:
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: i2pd-freebsd-${{ matrix.release }}
+        name: i2pd-freebsd-${{ matrix.release }}-${{ matrix.arch }}
         path: build/i2pd

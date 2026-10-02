@@ -84,8 +84,9 @@ jobs:
         tar -czf release/i2pd_${TAG}_osx.tar.gz -C artifacts/i2pd-macos-universal i2pd
         for dir in artifacts/i2pd-freebsd-*; do
           chmod +x $dir/i2pd
-          rel=${dir##*-}
-          tar -czf release/i2pd_${TAG}_freebsd${rel%%.*}_amd64.tar.gz -C $dir i2pd
+          build=${dir#artifacts/i2pd-freebsd-}
+          rel=${build%-*}
+          tar -czf release/i2pd_${TAG}_freebsd${rel%%.*}_${build##*-}.tar.gz -C $dir i2pd
         done
         cp artifacts/i2pd-installer/setup_i2pd_v*.exe release/
         cp artifacts/i2pd-linux-all/* release/
