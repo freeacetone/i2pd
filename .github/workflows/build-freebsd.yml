@@ -45,7 +45,7 @@ jobs:
         prepare: |
           sed -i '' 's|/quarterly"|/latest"|' /etc/pkg/FreeBSD.conf
           pkg update -f
-          pkg install -y devel/cmake devel/gmake lang/perl5 devel/boost-libs net/miniupnpc
+          pkg install -y devel/cmake devel/gmake perl5 devel/boost-libs net/miniupnpc
         run: |
           set -e
           sh contrib/static/build-freebsd.sh
